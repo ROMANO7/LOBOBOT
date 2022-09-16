@@ -1,7 +1,7 @@
 {
-	"prefix1": "//",
-	"prefix2": "!!",
-	"prefix3": "_",
+	"prefix1": "/",
+	"prefix2": "!",
+	"prefix3": "#",
 	"prefix4": "...",
 	"NomeDoBot": "INDOBOT",
 	"NickDono": "INDOBOT",
