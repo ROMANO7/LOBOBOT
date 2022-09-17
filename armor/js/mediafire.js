@@ -1,17 +1,19 @@
-import { lookup } from 'mime-types'
-import { mediafiredl } from '@bochilteam/scraper'
+const axios = require('axios')
+const cheerio = require('cheerio')
 
-let handler = async (m, { conn, args }) => {
-	if (!args[0]) throw 'Input URL' 
-	if (!/https?:\/\/(www\.)?mediafire\.com/.test(args[0])) throw 'Invalid URL' 
-	let res = await mediafiredl(args[0])
-	let mimetype = await lookup(res.url)
-	delete res.url2
-	m.reply(Object.keys(res).map(v => `*• ${v.capitalize()}:* ${res[v]}`).join('\n') + '\n\n_Sending file..._')
-	conn.sendMessage(m.chat, { document: { url: res.url }, fileName: res.filename, mimetype }, { quoted: m })
+const mediafireDl = async (url) => {
+const res = await axios.get(url) 
+const $ = cheerio.load(res.data)
+const hasil = []
+const link = $('a#downloadButton').attr('href')
+const size = $('a#downloadButton').text().replace('Download', '').replace('(', '').replace(')', '').replace('\n', '').replace('\n', '').replace('                         ', '')
+const seplit = link.split('/')
+const nama = seplit[5]
+mime = nama.split('.')
+mime = mime[1]
+hasil.push({ nama, mime, size, link })
+return hasil
 }
-handler.help = handler.alias = ['mediafire']
-handler.tags = ['downloader']
-handler.command = /^(mediafire|mf)$/i
+
 
 module.exports = { mediafireDl }
